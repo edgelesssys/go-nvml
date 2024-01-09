@@ -79,3 +79,24 @@ func SystemGetTopologyGpuSet(CpuNumber int) ([]Device, Return) {
 	ret = nvmlSystemGetTopologyGpuSet(uint32(CpuNumber), &Count, &DeviceArray[0])
 	return DeviceArray, ret
 }
+
+// nvml.SystemGetConfComputeCapabilities()
+func SystemGetConfComputeCapabilities() (ConfComputeSystemCaps, Return) {
+	var caps ConfComputeSystemCaps
+	ret := nvmlSystemGetConfComputeCapabilities(&caps)
+	return caps, ret
+}
+
+// nvml.SystemGetConfComputeState()
+func SystemGetConfComputeState() (ConfComputeSystemState, Return) {
+	var state ConfComputeSystemState
+	ret := nvmlSystemGetConfComputeState(&state)
+	return state, ret
+}
+
+// nvml.SystemGetConfComputeGpusReadyState()
+func SystemGetConfComputeGpusReadyState() (bool, Return) {
+	var isAcceptingWork uint32
+	ret := nvmlSystemGetConfComputeGpusReadyState(&isAcceptingWork)
+	return isAcceptingWork != 0, ret
+}

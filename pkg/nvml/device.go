@@ -101,14 +101,14 @@ func (Device Device) GetSerial() (string, Return) {
 }
 
 // nvml.DeviceGetCpuAffinity()
-func DeviceGetCpuAffinity(Device Device, NumCPUs int) ([]uint, Return) {
+func DeviceGetCpuAffinity(Device Device, NumCPUs int) ([]uint64, Return) {
 	CpuSetSize := uint32((NumCPUs-1)/int(unsafe.Sizeof(uint(0))) + 1)
-	CpuSet := make([]uint, CpuSetSize)
+	CpuSet := make([]uint64, CpuSetSize)
 	ret := nvmlDeviceGetCpuAffinity(Device, CpuSetSize, &CpuSet[0])
 	return CpuSet, ret
 }
 
-func (Device Device) GetCpuAffinity(NumCPUs int) ([]uint, Return) {
+func (Device Device) GetCpuAffinity(NumCPUs int) ([]uint64, Return) {
 	return DeviceGetCpuAffinity(Device, NumCPUs)
 }
 
@@ -131,26 +131,26 @@ func (Device Device) ClearCpuAffinity() Return {
 }
 
 // nvml.DeviceGetMemoryAffinity()
-func DeviceGetMemoryAffinity(Device Device, NumNodes int, Scope AffinityScope) ([]uint, Return) {
+func DeviceGetMemoryAffinity(Device Device, NumNodes int, Scope AffinityScope) ([]uint64, Return) {
 	NodeSetSize := uint32((NumNodes-1)/int(unsafe.Sizeof(uint(0))) + 1)
-	NodeSet := make([]uint, NodeSetSize)
+	NodeSet := make([]uint64, NodeSetSize)
 	ret := nvmlDeviceGetMemoryAffinity(Device, NodeSetSize, &NodeSet[0], Scope)
 	return NodeSet, ret
 }
 
-func (Device Device) GetMemoryAffinity(NumNodes int, Scope AffinityScope) ([]uint, Return) {
+func (Device Device) GetMemoryAffinity(NumNodes int, Scope AffinityScope) ([]uint64, Return) {
 	return DeviceGetMemoryAffinity(Device, NumNodes, Scope)
 }
 
 // nvml.DeviceGetCpuAffinityWithinScope()
-func DeviceGetCpuAffinityWithinScope(Device Device, NumCPUs int, Scope AffinityScope) ([]uint, Return) {
+func DeviceGetCpuAffinityWithinScope(Device Device, NumCPUs int, Scope AffinityScope) ([]uint64, Return) {
 	CpuSetSize := uint32((NumCPUs-1)/int(unsafe.Sizeof(uint(0))) + 1)
-	CpuSet := make([]uint, CpuSetSize)
+	CpuSet := make([]uint64, CpuSetSize)
 	ret := nvmlDeviceGetCpuAffinityWithinScope(Device, CpuSetSize, &CpuSet[0], Scope)
 	return CpuSet, ret
 }
 
-func (Device Device) GetCpuAffinityWithinScope(NumCPUs int, Scope AffinityScope) ([]uint, Return) {
+func (Device Device) GetCpuAffinityWithinScope(NumCPUs int, Scope AffinityScope) ([]uint64, Return) {
 	return DeviceGetCpuAffinityWithinScope(Device, NumCPUs, Scope)
 }
 
@@ -2622,26 +2622,6 @@ func (Device Device) GetGpuFabricInfo() (GpuFabricInfo, Return) {
 	return DeviceGetGpuFabricInfo(Device)
 }
 
-// nvml.DeviceCcuGetStreamState()
-func DeviceCcuGetStreamState(Device Device) (int, Return) {
-	var State uint32
-	ret := nvmlDeviceCcuGetStreamState(Device, &State)
-	return int(State), ret
-}
-
-func (Device Device) CcuGetStreamState() (int, Return) {
-	return DeviceCcuGetStreamState(Device)
-}
-
-// nvml.DeviceCcuSetStreamState()
-func DeviceCcuSetStreamState(Device Device, State int) Return {
-	return nvmlDeviceCcuSetStreamState(Device, uint32(State))
-}
-
-func (Device Device) CcuSetStreamState(State int) Return {
-	return DeviceCcuSetStreamState(Device, State)
-}
-
 // nvml.DeviceSetNvLinkDeviceLowPowerThreshold()
 func DeviceSetNvLinkDeviceLowPowerThreshold(Device Device, Info *NvLinkPowerThres) Return {
 	return nvmlDeviceSetNvLinkDeviceLowPowerThreshold(Device, Info)
@@ -2649,4 +2629,57 @@ func DeviceSetNvLinkDeviceLowPowerThreshold(Device Device, Info *NvLinkPowerThre
 
 func (Device Device) SetNvLinkDeviceLowPowerThreshold(Info *NvLinkPowerThres) Return {
 	return DeviceSetNvLinkDeviceLowPowerThreshold(Device, Info)
+}
+
+// nvml.DeviceGetConfComputeMemSizeInfo()
+func DeviceGetConfComputeMemSizeInfo(Device Device) (ConfComputeMemSizeInfo, Return) {
+	var Size ConfComputeMemSizeInfo
+	ret := nvmlDeviceGetConfComputeMemSizeInfo(Device, &Size)
+	return Size, ret
+}
+
+func (Device Device) GetConfComputeMemSizeInfo() (ConfComputeMemSizeInfo, Return) {
+	return DeviceGetConfComputeMemSizeInfo(Device)
+}
+
+// nvml.DeviceGetConfComputeProtectedMemoryUsage()
+func DeviceGetConfComputeProtectedMemoryUsage(Device Device) (Memory, Return) {
+	var Memory Memory
+	ret := nvmlDeviceGetConfComputeProtectedMemoryUsage(Device, &Memory)
+	return Memory, ret
+}
+
+func (Device Device) GetConfComputeProtectedMemoryUsage() (Memory, Return) {
+	return DeviceGetConfComputeProtectedMemoryUsage(Device)
+}
+
+// nvml.DeviceGetConfComputeGpuCertificate()
+func DeviceGetConfComputeGpuCertificate(Device Device) (ConfComputeGpuCertificate, Return) {
+	var Certificate ConfComputeGpuCertificate
+	ret := nvmlDeviceGetConfComputeGpuCertificate(Device, &Certificate)
+	return Certificate, ret
+}
+
+func (Device Device) GetConfComputeGpuCertificate() (ConfComputeGpuCertificate, Return) {
+	return DeviceGetConfComputeGpuCertificate(Device)
+}
+
+// nvml.DeviceGetConfComputeGpuAttestationReport()
+func DeviceGetConfComputeGpuAttestationReport(Device Device) (ConfComputeGpuAttestationReport, Return) {
+	var Report ConfComputeGpuAttestationReport
+	ret := nvmlDeviceGetConfComputeGpuAttestationReport(Device, &Report)
+	return Report, ret
+}
+
+func (Device Device) GetConfComputeGpuAttestationReport() (ConfComputeGpuAttestationReport, Return) {
+	return DeviceGetConfComputeGpuAttestationReport(Device)
+}
+
+// nvml.DeviceSetConfComputeUnprotectedMemSize()
+func DeviceSetConfComputeUnprotectedMemSize(Device Device, Size uint64) Return {
+	return nvmlDeviceSetConfComputeUnprotectedMemSize(Device, Size)
+}
+
+func (Device Device) SetConfComputeUnprotectedMemSize(Size uint64) Return {
+	return DeviceSetConfComputeUnprotectedMemSize(Device, Size)
 }

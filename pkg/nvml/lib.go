@@ -140,6 +140,9 @@ var nvmlVgpuInstanceGetLicenseInfo = nvmlVgpuInstanceGetLicenseInfo_v1
 // BlacklistDeviceInfo was replaced by ExcludedDeviceInfo
 type BlacklistDeviceInfo = ExcludedDeviceInfo
 
+var nvmlGetBlacklistDeviceCount = nvmlGetExcludedDeviceCount
+var nvmlGetBlacklistDeviceInfoByIndex = nvmlGetExcludedDeviceInfoByIndex
+
 type ProcessInfo_v1Slice []ProcessInfo_v1
 type ProcessInfo_v2Slice []ProcessInfo_v2
 

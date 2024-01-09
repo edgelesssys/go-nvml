@@ -153,7 +153,7 @@ $(PKG_BINDINGS_DIR)/nvml.h: $(GEN_BINDINGS_DIR)/nvml.h | $(PKG_BINDINGS_DIR)
 bindings: .create-bindings .strip-autogen-comment .strip-nvml-h-linenumber
 .create-bindings: $(PKG_BINDINGS_DIR)/nvml.h $(SOURCES) | $(PKG_BINDINGS_DIR)
 	cp $(GEN_BINDINGS_DIR)/nvml.yml $(PKG_BINDINGS_DIR)
-	c-for-go -out $(PKG_DIR) $(PKG_BINDINGS_DIR)/nvml.yml
+	/nix/store/rr611wqq7wqssij02dhs6j7i0fvyzgbr-c-for-go-unstable-2023-09-06/bin/c-for-go -out $(PKG_DIR) $(PKG_BINDINGS_DIR)/nvml.yml
 	cp $(GEN_BINDINGS_DIR)/*.go $(PKG_BINDINGS_DIR)
 	cd $(PKG_BINDINGS_DIR); \
 		go tool cgo -godefs types.go > types_gen.go; \
@@ -231,4 +231,3 @@ update-nvml-h:
 markdownlint: MDL := $(DOCKER) run --rm -v "$(PWD):$(PWD)" -w "$(PWD)" markdownlint/markdownlint:latest
 markdownlint:
 	@$(MDL) --rules=~no-hard-tabs,~line-length README.md
-

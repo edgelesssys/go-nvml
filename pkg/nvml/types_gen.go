@@ -70,6 +70,28 @@ type ProcessInfo struct {
 	ComputeInstanceId uint32
 }
 
+type ProcessDetail_v1 struct {
+	Pid                      uint32
+	UsedGpuMemory            uint64
+	GpuInstanceId            uint32
+	ComputeInstanceId        uint32
+	UsedGpuCcProtectedMemory uint64
+}
+
+type ProcessDetailList_v1 struct {
+	Version             uint32
+	Mode                uint32
+	NumProcArrayEntries uint32
+	ProcArray           *ProcessDetail_v1
+}
+
+type ProcessDetailList struct {
+	Version             uint32
+	Mode                uint32
+	NumProcArrayEntries uint32
+	ProcArray           *ProcessDetail_v1
+}
+
 type DeviceAttributes struct {
 	MultiprocessorCount       uint32
 	SharedCopyEngineCount     uint32
@@ -80,6 +102,10 @@ type DeviceAttributes struct {
 	GpuInstanceSliceCount     uint32
 	ComputeInstanceSliceCount uint32
 	MemorySizeMB              uint64
+}
+
+type C2cModeInfo_v1 struct {
+	IsC2cEnabled uint32
 }
 
 type RowRemapperHistogramValues struct {
@@ -192,7 +218,7 @@ type VgpuSchedulerLogEntry struct {
 type VgpuSchedulerLog struct {
 	EngineId        uint32
 	SchedulerPolicy uint32
-	IsEnabledARR    uint32
+	ArrMode         uint32
 	SchedulerParams [8]byte
 	EntriesCount    uint32
 	LogEntries      [200]VgpuSchedulerLogEntry
@@ -200,7 +226,7 @@ type VgpuSchedulerLog struct {
 
 type VgpuSchedulerGetState struct {
 	SchedulerPolicy uint32
-	IsEnabledARR    uint32
+	ArrMode         uint32
 	SchedulerParams [8]byte
 }
 
@@ -408,14 +434,54 @@ type FBCSessionInfo struct {
 	AverageLatency uint32
 }
 
+type ConfComputeSystemCaps struct {
+	CpuCaps  uint32
+	GpusCaps uint32
+}
+
+type ConfComputeSystemState struct {
+	Environment  uint32
+	CcFeature    uint32
+	DevToolsMode uint32
+}
+
+type ConfComputeMemSizeInfo struct {
+	ProtectedMemSizeKib   uint64
+	UnprotectedMemSizeKib uint64
+}
+
+type ConfComputeGpuCertificate struct {
+	CertChainSize            uint32
+	AttestationCertChainSize uint32
+	CertChain                [4096]uint8
+	AttestationCertChain     [5120]uint8
+}
+
+type ConfComputeGpuAttestationReport struct {
+	IsCecAttestationReportPresent uint32
+	AttestationReportSize         uint32
+	CecAttestationReportSize      uint32
+	Nonce                         [32]uint8
+	AttestationReport             [8192]uint8
+	CecAttestationReport          [4096]uint8
+}
+
 type GpuFabricState byte
 
 type GpuFabricInfo struct {
-	ClusterUuid [16]int8
+	ClusterUuid [16]uint8
 	Status      uint32
-	PartitionId uint32
+	CliqueId    uint32
 	State       uint8
 	Pad_cgo_0   [3]byte
+}
+
+type PowerScopeType byte
+
+type PowerValue_v2 struct {
+	Version      uint32
+	PowerScope   uint8
+	PowerValueMw uint32
 }
 
 type AffinityScope uint32
@@ -494,6 +560,23 @@ type GpuInstanceProfileInfo_v2 struct {
 	Name                [96]int8
 }
 
+type GpuInstanceProfileInfo_v3 struct {
+	Version             uint32
+	Id                  uint32
+	SliceCount          uint32
+	InstanceCount       uint32
+	MultiprocessorCount uint32
+	CopyEngineCount     uint32
+	DecoderCount        uint32
+	EncoderCount        uint32
+	JpegCount           uint32
+	OfaCount            uint32
+	MemorySizeMB        uint64
+	Name                [96]int8
+	Capabilities        uint32
+	Pad_cgo_0           [4]byte
+}
+
 type GpuInstanceInfo struct {
 	Device    Device
 	Id        uint32
@@ -534,6 +617,21 @@ type ComputeInstanceProfileInfo_v2 struct {
 	SharedJpegCount       uint32
 	SharedOfaCount        uint32
 	Name                  [96]int8
+}
+
+type ComputeInstanceProfileInfo_v3 struct {
+	Version               uint32
+	Id                    uint32
+	SliceCount            uint32
+	InstanceCount         uint32
+	MultiprocessorCount   uint32
+	SharedCopyEngineCount uint32
+	SharedDecoderCount    uint32
+	SharedEncoderCount    uint32
+	SharedJpegCount       uint32
+	SharedOfaCount        uint32
+	Name                  [96]int8
+	Capabilities          uint32
 }
 
 type ComputeInstanceInfo struct {
