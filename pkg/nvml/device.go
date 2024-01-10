@@ -2665,14 +2665,16 @@ func (Device Device) GetConfComputeGpuCertificate() (ConfComputeGpuCertificate, 
 }
 
 // nvml.DeviceGetConfComputeGpuAttestationReport()
-func DeviceGetConfComputeGpuAttestationReport(Device Device) (ConfComputeGpuAttestationReport, Return) {
-	var Report ConfComputeGpuAttestationReport
+func DeviceGetConfComputeGpuAttestationReport(Device Device, nonce [32]byte) (ConfComputeGpuAttestationReport, Return) {
+	var Report = ConfComputeGpuAttestationReport{
+		Nonce: nonce,
+	}
 	ret := nvmlDeviceGetConfComputeGpuAttestationReport(Device, &Report)
 	return Report, ret
 }
 
-func (Device Device) GetConfComputeGpuAttestationReport() (ConfComputeGpuAttestationReport, Return) {
-	return DeviceGetConfComputeGpuAttestationReport(Device)
+func (Device Device) GetConfComputeGpuAttestationReport(nonce [32]byte) (ConfComputeGpuAttestationReport, Return) {
+	return DeviceGetConfComputeGpuAttestationReport(Device, nonce)
 }
 
 // nvml.DeviceSetConfComputeUnprotectedMemSize()
