@@ -100,3 +100,8 @@ func SystemGetConfComputeGpusReadyState() (bool, Return) {
 	ret := nvmlSystemGetConfComputeGpusReadyState(&isAcceptingWork)
 	return isAcceptingWork != 0, ret
 }
+
+// nvml.SystemGetConfComputeGpusReadyState()
+func SystemSetConfComputeGpusReadyState(isAcceptingWork uint32) Return {
+	return nvmlSystemSetConfComputeGpusReadyState(isAcceptingWork)
+}
